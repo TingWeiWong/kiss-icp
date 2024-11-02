@@ -32,10 +32,12 @@ FetchContent_Declare(tbb URL https://github.com/oneapi-src/oneTBB/archive/refs/t
 if(NOT tbb_POPULATED)
   FetchContent_Populate(tbb)
   if(${CMAKE_VERSION} GREATER_EQUAL 3.25)
+    message(STATUS "Greater than 3.25 ${tbb_SOURCE_DIR} ${tbb_BINARY_DIR}")
     add_subdirectory(${tbb_SOURCE_DIR} ${tbb_BINARY_DIR} SYSTEM EXCLUDE_FROM_ALL)
   else()
     # Emulate the SYSTEM flag introduced in CMake 3.25. Withouth this flag the compiler will
     # consider this 3rdparty headers as source code and fail due the -Werror flag.
+    message(STATUS "Lower than 3.25 ${tbb_SOURCE_DIR} ${tbb_BINARY_DIR}")
     add_subdirectory(${tbb_SOURCE_DIR} ${tbb_BINARY_DIR} EXCLUDE_FROM_ALL)
     get_target_property(tbb_include_dirs tbb INTERFACE_INCLUDE_DIRECTORIES)
     set_target_properties(tbb PROPERTIES INTERFACE_SYSTEM_INCLUDE_DIRECTORIES "${tbb_include_dirs}")
